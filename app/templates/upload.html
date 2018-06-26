@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            /**
+             * 参数
+             */
+            $('#upload_btn').click(function () {
+                let formdata = new FormData($('#form')[0]);
+                let settings = {
+                    url: 'http://127.0.0.1:9000/upload/img/',
+                    type: 'post',
+                    data: formdata,
+                    //设置ajax不要缓存数据
+                    cache: false,
+                    // 让jquery的ajax 不要去处理数据
+                    processData: false,
+                    // 告诉ajax 不要不要处理contentType
+                    contentType: false,
+                    //  成功的回调方法
+                    success: function (result) {
+                        $('#wrap').append($('<img>').attr('src', result.url[0]))
+                    },
+                    error: function (status) {
+                    },
+                    complete: function () {
+                    }
+                };
+                $.ajax(settings);
+                //阻止form自动提交事件
+                return false;
+            })
+        })
+    </script>
+</head>
+<body>
+
+<form id="form" action="{{ url_for('upload.upload_img') }}" method="post" enctype="multipart/form-data">
+    <input type="file" multiple name="files">
+    <input type="button" id="upload_btn" value="上传">
+</form>
+<div id="wrap">
+
+</div>
+
+</body>
+</html>
